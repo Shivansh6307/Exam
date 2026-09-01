@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORBITRON Recruitment Examination 2026 — Paper 1</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Arial, sans-serif; background: #f3f4f6; color: #111827;
+    user-select: none;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  .card {
+    background: white; border-radius: 14px; padding: 24px; margin-bottom: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  h2 { margin-top: 0; }
+  .subtitle { color: #6b7280; margin-bottom: 18px; }
+  .warning {
+    padding: 12px 14px; border-radius: 9px; background: #fff7ed;
+    border: 1px solid #fed7aa; color: #9a3412; margin-bottom: 16px;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label { display: block; font-weight: 600; margin-bottom: 6px; }
+  input {
+    width: 100%; padding: 11px 12px; border: 1px solid #d1d5db;
+    border-radius: 8px; font-size: 15px; user-select: text;
+  }
+  button {
+    border: 0; border-radius: 9px; padding: 12px 18px; font-size: 16px;
+    font-weight: 700; cursor: pointer;
+  }
+  .primary { background: #111827; color: white; width: 100%; }
+  .secondary { background: #e5e7eb; color: #111827; }
+  .topbar {
+    position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96);
+    border-bottom: 1px solid #e5e7eb; padding: 12px 0; backdrop-filter: blur(8px);
+  }
+  .timer {
+    font-size: 24px; font-weight: 800; text-align: center;
+    padding: 8px; border-radius: 8px; background: #111827; color: white;
+  }
+  .question { border-left: 4px solid #111827; }
+  .question h3 { margin-top: 0; white-space: pre-line; line-height: 1.5; }
+  .option {
+    display: flex; gap: 10px; align-items: flex-start; padding: 11px;
+    margin: 8px 0; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;
+    user-select: none;
+  }
+  .option:hover { background: #f9fafb; }
+  .option input { width: auto; margin-top: 3px; }
+  #exam, #submitted { display: none; }
+  .progress { color: #6b7280; font-size: 14px; }
+  .danger { color: #b91c1c; font-weight: 700; }
+  .success { color: #166534; font-weight: 700; }
+  @media (max-width: 650px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body oncontextmenu="return false;">
+<div class="container">
+
+  <div id="registration" class="card">
+    <h1>ORBITRON – SPACE TECHNOLOGY CLUB</h1>
+    <div class="subtitle"><strong>RECRUITMENT EXAMINATION 2026 — PAPER 1</strong><br>Duration: 1 Hour • Total Questions: 30</div>
+
+    <div class="warning">
+      <strong>Important:</strong> This is a controlled exam. Do not switch tabs/windows,
+      leave fullscreen, copy/paste, or refresh the page. A tab/window change will trigger
+      automatic submission.
+    </div>
+
+    <form id="studentForm">
+      <div class="grid">
+        <div><label>Name *</label><input id="name" required autocomplete="name"></div>
+        <div><label>Email *</label><input id="email" type="email" required autocomplete="email"></div>
+        <div><label>Branch *</label><input id="branch" required></div>
+        <div><label>Section *</label><input id="section" required></div>
+        <div><label>KIET UID *</label><input id="kietUid" required></div>
+        <div><label>KIET Email ID *</label><input id="kietEmail" type="email" required></div>
+        <div><label>Phone Number *</label><input id="phone" type="tel" required></div>
+      </div>
+      <br>
+      <button class="primary" type="submit">Start Exam</button>
+    </form>
+  </div>
+
+  <div id="exam">
+    <div class="topbar">
+      <div class="container" style="padding:0 16px;">
+        <div class="timer" id="timer">60:00</div>
+        <div class="progress" id="progress" style="text-align:center;margin-top:5px;"></div>
+      </div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="card">
+      <button class="primary" id="submitButton" type="button">Submit Exam</button>
+    </div>
+  </div>
+
+  <div id="submitted" class="card">
+    <h2>Exam Submitted</h2>
+    <p id="submitMessage">Your response has been recorded.</p>
+    <p class="success">Thank you for participating in the ORBITRON Recruitment Examination 2026.</p>
+  </div>
+</div>
+
+<script>
+/*
+ * IMPORTANT:
+ * Replace this with your deployed Google Apps Script Web App URL.
+ */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6g7q-3hA9TF38lYT0_oDrIgpQNPDcFih9etJbJccL69ENERUIYJOxqmo7WaizO9sf/exec";
+
+const EXAM_DURATION_SECONDS = 60 * 60; // 1 hour
+const questions = [{"q": "A satellite in Low Earth Orbit completes one orbit in approximately 90 minutes. Approximately how many orbits does it complete in 24 hours?", "options": ["8", "16", "24", "32"]}, {"q": "Why must a satellite in a lower orbit travel at a higher velocity than one in a higher orbit to remain in a stable orbit?", "options": ["Atmospheric drag at lower altitudes forces it to speed up", "The stronger gravitational pull at lower altitude must be balanced by greater orbital speed", "Lower orbits have more fuel available for propulsion", "Ground stations can only track fast-moving objects"]}, {"q": "Two geostationary satellites placed too close together in longitude would primarily raise concerns about:", "options": ["Reduced solar panel efficiency", "Radio frequency interference between the two satellites", "Faster orbital decay of both satellites", "Increased mutual gravitational attraction"]}, {"q": "The round-trip signal delay for a geostationary satellite link is roughly 240 milliseconds mainly because of:", "options": ["Slow processing in the satellite's onboard computer", "The large distance the signal must travel at the speed of light", "Low transmission power of ground antennas", "Interference from nearby satellites"]}, {"q": "A satellite signal has a frequency of 4 GHz. What is its approximate wavelength? (c ≈ 3 × 10⁸ m/s)", "options": ["0.75 m", "7.5 cm", "75 cm", "0.075 mm"]}, {"q": "Higher frequency bands such as Ku or Ka are often preferred for high data-rate satellite links, despite greater rain attenuation, mainly because:", "options": ["Higher frequencies allow greater available bandwidth and thus higher data rates", "Higher frequencies travel faster through space than lower frequencies", "Higher frequencies need less transmission power", "Higher frequencies are immune to atmospheric interference"]}, {"q": "A 4 Ω resistor and a 6 Ω resistor are connected in series across a 20 V supply. What current flows in the circuit?", "options": ["5 A", "3.3 A", "2 A", "0.5 A"]}, {"q": "Why is a pull-up or pull-down resistor typically used with a digital input pin in an embedded system?", "options": ["To increase the voltage supplied to the microcontroller", "To ensure the pin reads a defined logic level when the input is not actively driven", "To reduce the microcontroller's clock speed", "To convert a digital signal into an analog one"]}, {"q": "Which statement correctly distinguishes SPI from I2C?", "options": ["SPI uses a shared addressed bus; I2C uses separate lines per device", "SPI is generally faster and uses separate chip-select lines per device, while I2C uses addressing over a shared two-wire bus", "I2C works only with analog signals; SPI works only with digital signals", "SPI supports only one master while I2C supports unlimited masters simultaneously"]}, {"q": "What will this pseudocode print?\nfor i = 1 to 3:\n  for j = 1 to 2:\n    print i*j", "options": ["1 2 2 4 3 6", "1 2 3 4 5 6", "2 4 6 8 10 12", "1 4 9"]}, {"q": "A recursive factorial function is written without a proper base case. What will most likely happen when it runs?", "options": ["It returns 0 immediately", "It causes a stack overflow due to infinite recursion", "It runs once and stops safely", "It automatically converts itself to an iterative loop"]}, {"q": "What is the worst-case time complexity of linear search on an unsorted array of n elements?", "options": ["O(1)", "O(log n)", "O(n)", "O(n²)"]}, {"q": "In CAD, applying a geometric constraint such as 'parallel' or 'concentric' to a sketch primarily helps to:", "options": ["Add color and texture to the design", "Define relationships between elements that update automatically as the design changes", "Permanently convert the 2D sketch into a 3D solid", "Reduce the polygon count of the model"]}, {"q": "When designing a rover chassis for uneven, rocky terrain, which choice would most improve stability without significantly reducing speed?", "options": ["Raising the center of mass as high as possible", "Lowering the center of mass and widening the wheelbase", "Making the chassis narrower and taller", "Removing all suspension components"]}, {"q": "A model performs very well on training data but poorly on new, unseen test data. This is best described as:", "options": ["Underfitting", "Overfitting", "Perfect generalization", "Data normalization"]}, {"q": "In a convolutional neural network used for image recognition, the main purpose of the convolution operation is to:", "options": ["Resize the image to a fixed dimension only", "Detect local features such as edges and patterns in the image", "Convert the image into audio data", "Compress the image file for storage"]}, {"q": "A line-following robot has two IR sensors. The left sensor detects the line, but the right sensor does not. What should the robot do to stay on the line?", "options": ["Turn right", "Turn left", "Stop completely", "Move backward"]}, {"q": "Why is sensor fusion (combining data from GPS, IMU, and camera) important for autonomous navigation?", "options": ["It reduces the total number of sensors needed to zero", "It improves accuracy and reliability by compensating for individual sensor weaknesses", "It removes the need for any onboard processing", "It allows the robot to function without any power source"]}, {"q": "A drone's battery discharges at a constant rate of 2% per minute. It starts at 100% and must land with at least 15% remaining. What is its maximum flight time?", "options": ["40 minutes", "42.5 minutes", "45 minutes", "50 minutes"]}, {"q": "A radio signal takes 1.28 seconds to travel from Earth to the Moon. Approximately what is the Earth–Moon distance? (c ≈ 3 × 10⁸ m/s)", "options": ["38,400 km", "384,000 km", "3,840,000 km", "1,280,000 km"]}, {"q": "In the sequence 1, 1, 2, 3, 5, 8, ___, each term is the sum of the previous two. What is the next term?", "options": ["11", "12", "13", "10"]}, {"q": "5 engineers can complete a project in 12 days. If 2 more engineers of equal efficiency join from day one, approximately how many days will the project now take?", "options": ["6 days", "7 days", "8.6 days", "10 days"]}, {"q": "Statement: 'All rovers require power. Some rovers use solar panels.' Which conclusion is definitely valid?", "options": ["All rovers use solar panels", "Some power sources for rovers are solar panels", "No rovers use batteries", "All power sources are solar"]}, {"q": "During a test, a robot's motor draws twice the expected current, but its speed stays the same. What is the most likely cause?", "options": ["The battery voltage has increased significantly", "There is increased mechanical resistance or load on the motor", "There is a bug in the control loop code", "The wireless module is malfunctioning"]}, {"q": "Study the pattern: 2, 6, 12, 20, 30, ___. What comes next?", "options": ["36", "40", "42", "45"]}, {"q": "Which ISRO launch vehicle is primarily designed to carry heavier payloads into Geosynchronous Transfer Orbit (GTO)?", "options": ["PSLV", "GSLV Mk III", "SSLV", "Agni-V"]}, {"q": "The Gaganyaan mission is significant mainly because it aims to:", "options": ["Land an Indian rover on Mars", "Send Indian astronauts into space using an indigenous crewed spacecraft", "Launch India's first ever satellite", "Build a permanent Moon base"]}, {"q": "Your idea is rejected in favor of a teammate's approach that you believe is less efficient. What is the most constructive response?", "options": ["Insist on your approach and refuse to help with the chosen one", "Voice your concerns with reasoning, then support the team's decision and contribute fully", "Stay silent and do minimal work on the project", "Complain to other teammates outside the meeting"]}, {"q": "You are assigned a technical task in a domain you have never worked in before. What is the most effective first step?", "options": ["Wait for someone else to complete it", "Refuse the task and request a different one", "Break the task down, research the fundamentals, and ask for guidance where needed", "Attempt it without any research and hope for the best"]}, {"q": "A project deadline is approaching and your part is behind schedule. What is the best course of action?", "options": ["Hide the delay and submit incomplete work without informing anyone", "Inform your team early, communicate the challenge, and seek help or adjust the plan", "Blame external factors and take no corrective action", "Wait until the deadline passes before saying anything"]}];
+const answerKey = [1, 1, 1, 1, 1, 0, 2, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1];
+
+let examStarted = false;
+let submitted = false;
+let secondsLeft = EXAM_DURATION_SECONDS;
+let timerInterval = null;
+let tabSwitches = 0;
+let fullscreenExits = 0;
+let startTime = null;
+let student = {};
+let submissionReason = "Manual submission";
+
+function $(id) { return document.getElementById(id); }
+
+function renderQuestions() {
+  const root = $("questions");
+  root.innerHTML = "";
+
+  questions.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card question";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = `Question ${index + 1}: ${item.q}`;
+    card.appendChild(h3);
+
+    item.options.forEach((option, optionIndex) => {
+      const label = document.createElement("label");
+      label.className = "option";
+
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = `q${index}`;
+      radio.value = optionIndex;
+
+      const span = document.createElement("span");
+      span.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
+
+      label.appendChild(radio);
+      label.appendChild(span);
+      card.appendChild(label);
+    });
+
+    root.appendChild(card);
+  });
+}
+
+function enterFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) {
+    el.requestFullscreen().catch(() => {});
+  }
+}
+
+function formatTime(total) {
+  const m = Math.floor(total / 60).toString().padStart(2, "0");
+  const s = (total % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function startTimer() {
+  $("timer").textContent = formatTime(secondsLeft);
+
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    $("timer").textContent = formatTime(Math.max(0, secondsLeft));
+
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      submissionReason = "Time expired";
+      submitExam();
+    }
+  }, 1000);
+}
+
+function getAnswersAndScore() {
+  let correct = 0, wrong = 0, unanswered = 0;
+
+  questions.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+
+    if (!selected) {
+      unanswered++;
+    } else if (Number(selected.value) === answerKey[i]) {
+      correct++;
+    } else {
+      wrong++;
+    }
+  });
+
+  return {
+    correct,
+    wrong,
+    unanswered,
+    score: correct
+  };
+}
+
+function makeSubmissionId() {
+  return "ORB-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+}
+
+async function sendResult(payload) {
+  /*
+   * text/plain avoids a CORS preflight. The Apps Script backend parses the
+   * JSON body. mode:no-cors means the browser cannot read the response,
+   * but the POST is still sent to the deployed Web App.
+   */
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
+    return true;
+  } catch (err) {
+    console.error("Could not send result:", err);
+    return false;
+  }
+}
+
+async function submitExam() {
+  if (submitted) return;
+  submitted = true;
+  examStarted = false;
+
+  if (timerInterval) clearInterval(timerInterval);
+
+  const result = getAnswersAndScore();
+  const elapsed = EXAM_DURATION_SECONDS - secondsLeft;
+  const minutes = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+
+  const payload = {
+    submissionId: makeSubmissionId(),
+    name: student.name,
+    email: student.email,
+    branch: student.branch,
+    section: student.section,
+    kietUid: student.kietUid,
+    kietEmail: student.kietEmail,
+    phone: student.phone,
+    score: result.score,
+    totalMarks: questions.length,
+    correct: result.correct,
+    wrong: result.wrong,
+    unanswered: result.unanswered,
+    timeTaken: `${minutes}m ${secs}s`,
+    tabSwitches: tabSwitches,
+    fullscreenExits: fullscreenExits,
+    submissionReason: submissionReason
+  };
+
+  $("exam").style.display = "none";
+  $("submitted").style.display = "block";
+  $("submitMessage").textContent =
+    `Your exam has been submitted. Score: ${result.score}/${questions.length}.`;
+
+  await sendResult(payload);
+
+  try {
+    if (document.fullscreenElement && document.exitFullscreen) {
+      await document.exitFullscreen();
+    }
+  } catch (_) {}
+}
+
+$("studentForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")) {
+    alert("Please configure GOOGLE_SCRIPT_URL in the HTML file before starting the exam.");
+    return;
+  }
+
+  student = {
+    name: $("name").value.trim(),
+    email: $("email").value.trim(),
+    branch: $("branch").value.trim(),
+    section: $("section").value.trim(),
+    kietUid: $("kietUid").value.trim(),
+    kietEmail: $("kietEmail").value.trim(),
+    phone: $("phone").value.trim()
+  };
+
+  renderQuestions();
+
+  $("registration").style.display = "none";
+  $("exam").style.display = "block";
+
+  examStarted = true;
+  startTime = Date.now();
+  startTimer();
+  enterFullscreen();
+});
+
+$("submitButton").addEventListener("click", () => {
+  submissionReason = "Manual submission";
+  submitExam();
+});
+
+/*
+ * Tab/window switching:
+ * visibilitychange is the most reliable browser signal for leaving the tab.
+ * We deliberately auto-submit on the first detected tab switch, as requested.
+ */
+document.addEventListener("visibilitychange", () => {
+  if (examStarted && document.hidden && !submitted) {
+    tabSwitches++;
+    submissionReason = "Tab/window switch detected";
+    submitExam();
+  }
+});
+
+/* Fullscreen exit detection */
+document.addEventListener("fullscreenchange", () => {
+  if (examStarted && !document.fullscreenElement && !submitted) {
+    fullscreenExits++;
+    submissionReason = "Fullscreen exited";
+    submitExam();
+  }
+});
+
+/* Block common copying / inspection shortcuts */
+["copy", "cut", "paste", "contextmenu", "dragstart", "selectstart"].forEach(evt => {
+  document.addEventListener(evt, e => {
+    if (examStarted) e.preventDefault();
+  });
+});
+
+document.addEventListener("keydown", e => {
+  if (!examStarted) return;
+
+  const key = e.key.toLowerCase();
+  const blocked =
+    (e.ctrlKey || e.metaKey) && ["c","v","x","u","s","a","p"].includes(key);
+
+  const devTools =
+    e.key === "F12" ||
+    (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key));
+
+  if (blocked || devTools) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+});
+
+/* Warn against refresh/back navigation */
+window.addEventListener("beforeunload", e => {
+  if (examStarted && !submitted) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+</script>
+</body>
+</html>
