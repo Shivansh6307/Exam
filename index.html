@@ -3,376 +3,589 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ORBITRON Recruitment Examination 2026 — Paper 1</title>
+<title>Orbitron — Recruitment Exam 2026</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: Arial, sans-serif; background: #f3f4f6; color: #111827;
-    user-select: none;
+  :root{
+    --ink:#0f1b2b;
+    --paper:#f3f5f8;
+    --line:#d6dce3;
+    --accent:#1b3a5c;
+    --accent-soft:#e7edf4;
+    --danger:#8a2e2e;
+    --danger-soft:#f6e6e2;
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
   }
-  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
-  .card {
-    background: white; border-radius: 14px; padding: 24px; margin-bottom: 18px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    min-height:100vh;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
   }
-  h1 { margin: 0 0 6px; font-size: 26px; }
-  h2 { margin-top: 0; }
-  .subtitle { color: #6b7280; margin-bottom: 18px; }
-  .warning {
-    padding: 12px 14px; border-radius: 9px; background: #fff7ed;
-    border: 1px solid #fed7aa; color: #9a3412; margin-bottom: 16px;
+  ::selection{background:transparent;}
+
+  .topbar{
+    position:sticky;top:0;z-index:10;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 28px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
   }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  label { display: block; font-weight: 600; margin-bottom: 6px; }
-  input {
-    width: 100%; padding: 11px 12px; border: 1px solid #d1d5db;
-    border-radius: 8px; font-size: 15px; user-select: text;
+  .topbar .title{
+    font-family:var(--serif);
+    font-size:18px;
+    letter-spacing:0.2px;
   }
-  button {
-    border: 0; border-radius: 9px; padding: 12px 18px; font-size: 16px;
-    font-weight: 700; cursor: pointer;
+  .topbar .title small{
+    display:block; font-family:var(--sans); font-size:11px; color:#66707c; letter-spacing:0.4px;
   }
-  .primary { background: #111827; color: white; width: 100%; }
-  .secondary { background: #e5e7eb; color: #111827; }
-  .topbar {
-    position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96);
-    border-bottom: 1px solid #e5e7eb; padding: 12px 0; backdrop-filter: blur(8px);
+  .timer{
+    font-variant-numeric:tabular-nums;
+    font-family:var(--mono);
+    font-size:15px;
+    padding:6px 14px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fff;
   }
-  .timer {
-    font-size: 24px; font-weight: 800; text-align: center;
-    padding: 8px; border-radius: 8px; background: #111827; color: white;
+  .timer.low{ border-color:var(--danger); color:var(--danger); background:var(--danger-soft); }
+
+  .wrap{ max-width:700px; margin:0 auto; padding:36px 20px 80px; }
+
+  .notice{
+    border:1px solid var(--line);
+    background:#fff;
+    border-left:3px solid var(--accent);
+    padding:14px 16px;
+    font-size:14px;
+    line-height:1.55;
+    margin-bottom:28px;
+    color:#3a444e;
   }
-  .question { border-left: 4px solid #111827; }
-  .question h3 { margin-top: 0; white-space: pre-line; line-height: 1.5; }
-  .option {
-    display: flex; gap: 10px; align-items: flex-start; padding: 11px;
-    margin: 8px 0; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;
-    user-select: none;
+
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:13px; color:#555; margin-bottom:5px; }
+  .field input, .field select{
+    width:100%; padding:10px 12px; font-size:15px;
+    border:1px solid var(--line); border-radius:3px; background:#fff;
+    font-family:var(--sans); color:var(--ink);
   }
-  .option:hover { background: #f9fafb; }
-  .option input { width: auto; margin-top: 3px; }
-  #exam, #submitted { display: none; }
-  .progress { color: #6b7280; font-size: 14px; }
-  .danger { color: #b91c1c; font-weight: 700; }
-  .success { color: #166534; font-weight: 700; }
-  @media (max-width: 650px) { .grid { grid-template-columns: 1fr; } }
+  .field input:focus, .field select:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .phone-row{ display:flex; gap:8px; }
+  .phone-row .prefix{
+    width:56px; text-align:center; background:var(--accent-soft); border:1px solid var(--line);
+    border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--accent); font-weight:600;
+  }
+  .phone-row input{ flex:1; }
+
+  .q{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .q-num{ font-size:12px; color:#7a8a99; margin-bottom:6px; }
+  .q-text{ font-family:var(--serif); font-size:17px; line-height:1.45; margin-bottom:14px; }
+  .opt{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:9px 10px; border-radius:3px; cursor:pointer;
+    font-size:15px; line-height:1.4;
+  }
+  .opt:hover{ background:var(--accent-soft); }
+  .opt input{ margin-top:3px; }
+
+  .submit-row{ margin-top:30px; text-align:right; }
+  button{
+    font-family:var(--sans); font-size:15px; font-weight:600;
+    padding:12px 26px; border-radius:3px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer;
+  }
+  button:hover{ background:#122a45; }
+  button:disabled{ background:#b7c0c9; cursor:not-allowed; }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  .result-box{
+    background:#fff; border:1px solid var(--line); border-radius:4px;
+    padding:40px 32px; text-align:center; margin-top:40px;
+  }
+  .result-box h2{ font-family:var(--serif); margin-top:0; font-size:26px; }
+  .result-note{ color:#556070; font-size:15px; margin-top:10px; line-height:1.6; }
+
+  .watermark{
+    position:fixed; bottom:14px; right:18px;
+    font-size:11px; color:#9aa6b2;
+  }
+
+  .progress{ font-size:12px; color:#7a8a99; margin-bottom:18px; }
 </style>
 </head>
-<body oncontextmenu="return false;">
-<div class="container">
+<body>
 
-  <div id="registration" class="card">
-    <h1>ORBITRON – SPACE TECHNOLOGY CLUB</h1>
-    <div class="subtitle"><strong>RECRUITMENT EXAMINATION 2026 — PAPER 1</strong><br>Duration: 1 Hour • Total Questions: 30</div>
-
-    <div class="warning">
-      <strong>Important:</strong> This is a controlled exam. Do not switch tabs/windows,
-      leave fullscreen, copy/paste, or refresh the page. A tab/window change will trigger
-      automatic submission.
-    </div>
-
-    <form id="studentForm">
-      <div class="grid">
-        <div><label>Name *</label><input id="name" required autocomplete="name"></div>
-        <div><label>Email *</label><input id="email" type="email" required autocomplete="email"></div>
-        <div><label>Branch *</label><input id="branch" required></div>
-        <div><label>Section *</label><input id="section" required></div>
-        <div><label>KIET UID *</label><input id="kietUid" required></div>
-        <div><label>KIET Email ID *</label><input id="kietEmail" type="email" required></div>
-        <div><label>Phone Number *</label><input id="phone" type="tel" required></div>
-      </div>
-      <br>
-      <button class="primary" type="submit">Start Exam</button>
-    </form>
-  </div>
-
-  <div id="exam">
-    <div class="topbar">
-      <div class="container" style="padding:0 16px;">
-        <div class="timer" id="timer">60:00</div>
-        <div class="progress" id="progress" style="text-align:center;margin-top:5px;"></div>
-      </div>
-    </div>
-
-    <div id="questions"></div>
-
-    <div class="card">
-      <button class="primary" id="submitButton" type="button">Submit Exam</button>
-    </div>
-  </div>
-
-  <div id="submitted" class="card">
-    <h2>Exam Submitted</h2>
-    <p id="submitMessage">Your response has been recorded.</p>
-    <p class="success">Thank you for participating in the ORBITRON Recruitment Examination 2026.</p>
-  </div>
+<div class="topbar">
+  <div class="title">Orbitron — Recruitment Exam 2026<small>Space Technology Club</small></div>
+  <div class="timer" id="timerDisplay">60:00</div>
 </div>
 
+<div class="wrap">
+
+  <!-- START SCREEN -->
+  <div class="screen active" id="screen-start">
+    <div class="notice">
+      Duration: 60 minutes · 30 MCQs · 1 mark each · No negative marking.<br>
+      This exam auto-submits if you switch tabs, minimize the window, or leave this page.
+      Copying, right-click, and text selection are disabled. Stay on this tab for the full duration.
+    </div>
+
+    <div class="field">
+      <label for="studentName">Full name</label>
+      <input type="text" id="studentName" required>
+    </div>
+
+    <div class="field">
+      <label for="branch">Branch</label>
+      <select id="branch" required>
+        <option value="" disabled selected>Select your branch</option>
+        <option>CSE</option>
+        <option>CSE (AI)</option>
+        <option>CSE (AIML)</option>
+        <option>CSE (Data Science)</option>
+        <option>CS (Cyber Security)</option>
+        <option>IT</option>
+        <option>ECE</option>
+        <option>ECE-VLSI</option>
+        <option>ELCE</option>
+        <option>AMIA</option>
+        <option>EEE</option>
+        <option>ME</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="section">Section</label>
+      <input type="text" id="section" placeholder="e.g. CS-3" required>
+    </div>
+
+    <div class="field">
+      <label for="uid">KIET UID</label>
+      <input type="text" id="uid" placeholder="e.g. 2401234567" required>
+    </div>
+
+    <div class="field">
+      <label for="studentEmail">KIET email ID</label>
+      <input type="email" id="studentEmail" placeholder="yourname@kiet.edu" pattern="[a-zA-Z0-9._%+-]+@kiet\.edu" required>
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone number</label>
+      <div class="phone-row">
+        <div class="prefix">+91</div>
+        <input type="tel" id="phone" placeholder="10-digit mobile number" inputmode="numeric" minlength="10" maxlength="10" pattern="\d{10}" required>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button id="beginBtn">Begin exam</button>
+    </div>
+  </div>
+
+  <!-- EXAM SCREEN -->
+  <div class="screen" id="screen-exam">
+    <div id="questionsContainer"></div>
+    <div class="submit-row">
+      <button id="submitBtn">Submit exam</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="screen" id="screen-result">
+    <div class="result-box">
+      <h2 id="resultHeading">Exam submitted</h2>
+      <div class="result-note" id="resultNote">
+        Thank you for responding. Your submission has been recorded.<br>
+        You may close this tab now.
+      </div>
+    </div>
+  </div>
+
+  <!-- ALREADY SUBMITTED SCREEN -->
+  <div class="screen" id="screen-already">
+    <div class="result-box">
+      <h2>Already submitted</h2>
+      <div class="result-note">
+        Our records show this exam has already been submitted from this device.<br>
+        Each candidate may attempt the exam only once. If you believe this is an error, contact the Orbitron team.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="watermark" id="watermark">Orbitron 2026</div>
+
 <script>
-/*
- * IMPORTANT:
- * Replace this with your deployed Google Apps Script Web App URL.
- */
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6g7q-3hA9TF38lYT0_oDrIgpQNPDcFih9etJbJccL69ENERUIYJOxqmo7WaizO9sf/exec";
+/* ============================================================
+   1. CONFIG
+   ============================================================ */
 
-const EXAM_DURATION_SECONDS = 60 * 60; // 1 hour
-const questions = [{"q": "A satellite in Low Earth Orbit completes one orbit in approximately 90 minutes. Approximately how many orbits does it complete in 24 hours?", "options": ["8", "16", "24", "32"]}, {"q": "Why must a satellite in a lower orbit travel at a higher velocity than one in a higher orbit to remain in a stable orbit?", "options": ["Atmospheric drag at lower altitudes forces it to speed up", "The stronger gravitational pull at lower altitude must be balanced by greater orbital speed", "Lower orbits have more fuel available for propulsion", "Ground stations can only track fast-moving objects"]}, {"q": "Two geostationary satellites placed too close together in longitude would primarily raise concerns about:", "options": ["Reduced solar panel efficiency", "Radio frequency interference between the two satellites", "Faster orbital decay of both satellites", "Increased mutual gravitational attraction"]}, {"q": "The round-trip signal delay for a geostationary satellite link is roughly 240 milliseconds mainly because of:", "options": ["Slow processing in the satellite's onboard computer", "The large distance the signal must travel at the speed of light", "Low transmission power of ground antennas", "Interference from nearby satellites"]}, {"q": "A satellite signal has a frequency of 4 GHz. What is its approximate wavelength? (c ≈ 3 × 10⁸ m/s)", "options": ["0.75 m", "7.5 cm", "75 cm", "0.075 mm"]}, {"q": "Higher frequency bands such as Ku or Ka are often preferred for high data-rate satellite links, despite greater rain attenuation, mainly because:", "options": ["Higher frequencies allow greater available bandwidth and thus higher data rates", "Higher frequencies travel faster through space than lower frequencies", "Higher frequencies need less transmission power", "Higher frequencies are immune to atmospheric interference"]}, {"q": "A 4 Ω resistor and a 6 Ω resistor are connected in series across a 20 V supply. What current flows in the circuit?", "options": ["5 A", "3.3 A", "2 A", "0.5 A"]}, {"q": "Why is a pull-up or pull-down resistor typically used with a digital input pin in an embedded system?", "options": ["To increase the voltage supplied to the microcontroller", "To ensure the pin reads a defined logic level when the input is not actively driven", "To reduce the microcontroller's clock speed", "To convert a digital signal into an analog one"]}, {"q": "Which statement correctly distinguishes SPI from I2C?", "options": ["SPI uses a shared addressed bus; I2C uses separate lines per device", "SPI is generally faster and uses separate chip-select lines per device, while I2C uses addressing over a shared two-wire bus", "I2C works only with analog signals; SPI works only with digital signals", "SPI supports only one master while I2C supports unlimited masters simultaneously"]}, {"q": "What will this pseudocode print?\nfor i = 1 to 3:\n  for j = 1 to 2:\n    print i*j", "options": ["1 2 2 4 3 6", "1 2 3 4 5 6", "2 4 6 8 10 12", "1 4 9"]}, {"q": "A recursive factorial function is written without a proper base case. What will most likely happen when it runs?", "options": ["It returns 0 immediately", "It causes a stack overflow due to infinite recursion", "It runs once and stops safely", "It automatically converts itself to an iterative loop"]}, {"q": "What is the worst-case time complexity of linear search on an unsorted array of n elements?", "options": ["O(1)", "O(log n)", "O(n)", "O(n²)"]}, {"q": "In CAD, applying a geometric constraint such as 'parallel' or 'concentric' to a sketch primarily helps to:", "options": ["Add color and texture to the design", "Define relationships between elements that update automatically as the design changes", "Permanently convert the 2D sketch into a 3D solid", "Reduce the polygon count of the model"]}, {"q": "When designing a rover chassis for uneven, rocky terrain, which choice would most improve stability without significantly reducing speed?", "options": ["Raising the center of mass as high as possible", "Lowering the center of mass and widening the wheelbase", "Making the chassis narrower and taller", "Removing all suspension components"]}, {"q": "A model performs very well on training data but poorly on new, unseen test data. This is best described as:", "options": ["Underfitting", "Overfitting", "Perfect generalization", "Data normalization"]}, {"q": "In a convolutional neural network used for image recognition, the main purpose of the convolution operation is to:", "options": ["Resize the image to a fixed dimension only", "Detect local features such as edges and patterns in the image", "Convert the image into audio data", "Compress the image file for storage"]}, {"q": "A line-following robot has two IR sensors. The left sensor detects the line, but the right sensor does not. What should the robot do to stay on the line?", "options": ["Turn right", "Turn left", "Stop completely", "Move backward"]}, {"q": "Why is sensor fusion (combining data from GPS, IMU, and camera) important for autonomous navigation?", "options": ["It reduces the total number of sensors needed to zero", "It improves accuracy and reliability by compensating for individual sensor weaknesses", "It removes the need for any onboard processing", "It allows the robot to function without any power source"]}, {"q": "A drone's battery discharges at a constant rate of 2% per minute. It starts at 100% and must land with at least 15% remaining. What is its maximum flight time?", "options": ["40 minutes", "42.5 minutes", "45 minutes", "50 minutes"]}, {"q": "A radio signal takes 1.28 seconds to travel from Earth to the Moon. Approximately what is the Earth–Moon distance? (c ≈ 3 × 10⁸ m/s)", "options": ["38,400 km", "384,000 km", "3,840,000 km", "1,280,000 km"]}, {"q": "In the sequence 1, 1, 2, 3, 5, 8, ___, each term is the sum of the previous two. What is the next term?", "options": ["11", "12", "13", "10"]}, {"q": "5 engineers can complete a project in 12 days. If 2 more engineers of equal efficiency join from day one, approximately how many days will the project now take?", "options": ["6 days", "7 days", "8.6 days", "10 days"]}, {"q": "Statement: 'All rovers require power. Some rovers use solar panels.' Which conclusion is definitely valid?", "options": ["All rovers use solar panels", "Some power sources for rovers are solar panels", "No rovers use batteries", "All power sources are solar"]}, {"q": "During a test, a robot's motor draws twice the expected current, but its speed stays the same. What is the most likely cause?", "options": ["The battery voltage has increased significantly", "There is increased mechanical resistance or load on the motor", "There is a bug in the control loop code", "The wireless module is malfunctioning"]}, {"q": "Study the pattern: 2, 6, 12, 20, 30, ___. What comes next?", "options": ["36", "40", "42", "45"]}, {"q": "Which ISRO launch vehicle is primarily designed to carry heavier payloads into Geosynchronous Transfer Orbit (GTO)?", "options": ["PSLV", "GSLV Mk III", "SSLV", "Agni-V"]}, {"q": "The Gaganyaan mission is significant mainly because it aims to:", "options": ["Land an Indian rover on Mars", "Send Indian astronauts into space using an indigenous crewed spacecraft", "Launch India's first ever satellite", "Build a permanent Moon base"]}, {"q": "Your idea is rejected in favor of a teammate's approach that you believe is less efficient. What is the most constructive response?", "options": ["Insist on your approach and refuse to help with the chosen one", "Voice your concerns with reasoning, then support the team's decision and contribute fully", "Stay silent and do minimal work on the project", "Complain to other teammates outside the meeting"]}, {"q": "You are assigned a technical task in a domain you have never worked in before. What is the most effective first step?", "options": ["Wait for someone else to complete it", "Refuse the task and request a different one", "Break the task down, research the fundamentals, and ask for guidance where needed", "Attempt it without any research and hope for the best"]}, {"q": "A project deadline is approaching and your part is behind schedule. What is the best course of action?", "options": ["Hide the delay and submit incomplete work without informing anyone", "Inform your team early, communicate the challenge, and seek help or adjust the plan", "Blame external factors and take no corrective action", "Wait until the deadline passes before saying anything"]}];
-const answerKey = [1, 1, 1, 1, 1, 0, 2, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1];
+// Paste your Google Apps Script /exec URL here (see google-apps-script.gs)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzsh_z5XYlZb0-ZPl2esaJqp9heLtKUH3Ymfd7iv3DG_u0jm1hgv58NJ8SUxp5gC0P/exec";
 
+const EXAM_DURATION_MINUTES = 60;
+
+const QUESTIONS = [
+  { text: "On an Arduino Uno, the instruction analogWrite(pin, 64) generates a PWM signal whose duty cycle is approximately", options: ["6.4 %","25 %","50 %","64 %"], correct: 1 },
+  { text: "A microcontroller communicates with three sensors over a standard 4-wire SPI bus using independent slave-select lines. What is the minimum number of microcontroller pins required?", options: ["4","5","6","7"], correct: 2 },
+  { text: "A push button is connected between a GPIO pin and ground, and the internal pull-up resistor of that pin is enabled. What logic level does the pin read when the button is pressed?", options: ["LOW, because the pin is connected to ground through the button","HIGH, because the pull-up resistor dominates","Floating, because no external resistor is used","Alternating between HIGH and LOW"], correct: 0 },
+  { text: "A temperature sensor with an output of 10 mV/°C is connected to a 10-bit ADC operating with a 5 V reference. If the ADC returns a value of 205, the measured temperature is approximately", options: ["10 °C","50 °C","100 °C","205 °C"], correct: 2 },
+  { text: "An H-bridge driver such as the L298N is used with a rover's DC motor mainly because it allows the motor to", options: ["operate at a higher supply voltage than rated","rotate in both directions by reversing the applied polarity","consume less current during startup","be controlled without any PWM signal"], correct: 1 },
+  { text: "A microcontroller board keeps resetting randomly every time the rover's drive motor starts, although the code runs perfectly when the motor is disconnected. The most likely cause is", options: ["an error in the program's loop structure","a large inrush current from the motor causing a supply voltage dip on the shared rail","incorrect baud rate configuration","the motor operating at too low a PWM frequency"], correct: 1 },
+  { text: "As the altitude of a circular Earth orbit increases, the orbital velocity of the satellite and its orbital period respectively", options: ["increase and decrease","decrease and increase","both increase","both decrease"], correct: 1 },
+  { text: "Housekeeping data such as battery voltage, solar-panel current and internal temperature is sent from a satellite to the ground station through", options: ["the telemetry link","the command link","the payload data bus","the attitude control subsystem"], correct: 0 },
+  { text: "If the diameter of a parabolic ground-station dish is doubled while the operating frequency remains the same, the antenna gain increases by approximately", options: ["2 dB","3 dB","6 dB","12 dB"], correct: 2 },
+  { text: "What is the minimum number of GNSS satellites that must be visible to compute a three-dimensional position fix?", options: ["2","3","4","6"], correct: 2 },
+  { text: "A Sun-synchronous orbit is preferred for Earth-observation satellites because it", options: ["keeps the satellite permanently above one point on the equator","allows the satellite to cross a given latitude at nearly the same local solar time, giving consistent illumination","eliminates the need for an onboard power system","removes the need for any orbital station-keeping"], correct: 1 },
+  { text: "A model is trained to predict the exact battery voltage of a CubeSat one hour into the future. This task is an example of", options: ["classification","regression","clustering","dimensionality reduction"], correct: 1 },
+  { text: "A dataset is split into training, validation and test sets. The primary purpose of the validation set is to", options: ["increase the total size of the training data","tune hyperparameters and compare models before the final test evaluation","replace the test set when accuracy is low","store only the mislabelled samples"], correct: 1 },
+  { text: "Which of the following is a valid technique for reducing overfitting in a neural network?", options: ["Increasing the number of layers indefinitely","Training for many more epochs on the same data","Applying dropout and regularization","Reducing the size of the training dataset"], correct: 2 },
+  { text: "An AI system analyses satellite imagery to detect forest fires. Failing to detect an actual fire is far more damaging than raising a false alarm. Which metric should be prioritized?", options: ["Precision","Recall","Specificity","Training accuracy"], correct: 1 },
+  { text: "In a neural network, backpropagation is used to", options: ["randomly initialize the weights before training","compute the gradients of the loss with respect to the weights so they can be updated","convert the input data into a normalized form","select the number of neurons in each hidden layer"], correct: 1 },
+  { text: "A rigid component floating freely in three-dimensional space, before any assembly mate is applied, has how many degrees of freedom?", options: ["3","4","6","12"], correct: 2 },
+  { text: "In first-angle projection, the top view of an object is placed", options: ["above the front view","below the front view","to the left of the front view","behind the front view"], correct: 1 },
+  { text: "To increase the bending stiffness of a flat satellite structural panel with the least possible increase in mass, the most effective design approach is to", options: ["increase the panel thickness uniformly","use a honeycomb sandwich or add stiffening ribs to raise the second moment of area","change the material to one with higher density","add additional fasteners along the edges"], correct: 1 },
+  { text: "Which of the following is NOT a geometric relation applied within a 2D CAD sketch?", options: ["Tangent","Concentric","Extrude","Perpendicular"], correct: 2 },
+  { text: "In an 8-bit grayscale image, a pixel value of 255 represents", options: ["pure black","maximum brightness (white)","a transparent pixel","an undefined pixel"], correct: 1 },
+  { text: "A binary mask of a landing pad contains many small scattered white specks caused by noise. Which morphological operation is best suited to remove them while preserving the shape of the pad?", options: ["Dilation","Opening","Closing","Histogram equalization"], correct: 1 },
+  { text: "A drone must identify multiple cracks in a solar panel image and also report where each crack is located. This task is best described as", options: ["image classification","object detection","image compression","edge thinning"], correct: 1 },
+  { text: "A satellite imaging camera is specified to have a ground sample distance (GSD) of 5 metres. This means that", options: ["the satellite orbits 5 metres above its nominal altitude","each image pixel corresponds to a 5 m × 5 m area on the ground","the camera captures one image every 5 metres of ground travel","the smallest detectable object must be 5 kilometres wide"], correct: 1 },
+  { text: "A ground-station transmitter delivers 20 dBm of power, the feeder cable introduces a 3 dB loss, and the antenna provides 12 dBi of gain. The effective isotropic radiated power (EIRP) is", options: ["5 dBm","29 dBm","35 dBm","44 dBm"], correct: 1 },
+  { text: "A satellite stores 2 GB of imagery during one pass and downlinks it at 40 Mbps. Assuming 1 byte = 8 bits and no overhead, the time required for the complete download is approximately", options: ["50 seconds","100 seconds","400 seconds","800 seconds"], correct: 2 },
+  { text: "A rover uses a 12 V, 5000 mAh battery pack to run a constant load of 24 W. Ignoring losses, the approximate operating time is", options: ["1.0 hour","2.5 hours","5.0 hours","10.0 hours"], correct: 1 },
+  { text: "Find the next number in the series: 5, 11, 23, 47, ___", options: ["71","83","94","95"], correct: 3 },
+  { text: "Consider the statement: \"No satellite that fails the thermal vacuum test is launched.\" Satellite Z was launched. Which conclusion necessarily follows?", options: ["Satellite Z did not fail the thermal vacuum test","Satellite Z was never subjected to any test","Satellite Z failed the test but was launched anyway","Nothing can be concluded about Satellite Z"], correct: 0 },
+  { text: "A CubeSat carries a critical sensor with a mission reliability of 90%. A second identical sensor is added in parallel as a redundant unit, and the mission succeeds if at least one sensor works. The reliability of the redundant configuration is", options: ["81 %","90 %","95 %","99 %"], correct: 3 }
+];
+
+/* ============================================================
+   2. STATE
+   ============================================================ */
 let examStarted = false;
-let submitted = false;
-let secondsLeft = EXAM_DURATION_SECONDS;
+let examSubmitted = false;
+let timeLeft = EXAM_DURATION_MINUTES * 60;
 let timerInterval = null;
-let tabSwitches = 0;
-let fullscreenExits = 0;
-let startTime = null;
-let student = {};
-let submissionReason = "Manual submission";
+const userAnswers = {};
+let clientIP = 'Unknown';
+const SUBMIT_FLAG_KEY = 'orbitron_' + document.title.replace(/[^a-z0-9]/gi,'_').toLowerCase() + '_submitted';
 
-function $(id) { return document.getElementById(id); }
+function getDeviceFingerprint(){
+  try {
+    const nav = navigator, scr = screen;
+    let canvasFp = '';
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.textBaseline = 'top';
+      ctx.font = "14px Arial";
+      ctx.fillText('orbitron-fingerprint', 2, 2);
+      canvasFp = canvas.toDataURL();
+    } catch(e){}
+    const raw = [
+      nav.userAgent, nav.language, scr.width, scr.height, scr.colorDepth,
+      Intl.DateTimeFormat().resolvedOptions().timeZone, nav.hardwareConcurrency || '',
+      canvasFp
+    ].join('|');
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++){
+      hash = (hash << 5) - hash + raw.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'fp_' + Math.abs(hash).toString(36);
+  } catch(e){
+    return 'fp_unknown';
+  }
+}
 
-function renderQuestions() {
-  const root = $("questions");
-  root.innerHTML = "";
+async function fetchClientIP(){
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip || 'Unknown';
+  } catch(e){
+    return 'Unknown';
+  }
+}
 
-  questions.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "card question";
+/* ============================================================
+   3. SCREEN HELPERS
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-    const h3 = document.createElement("h3");
-    h3.textContent = `Question ${index + 1}: ${item.q}`;
-    card.appendChild(h3);
+/* ============================================================
+   4. BUILD QUESTIONS
+   ============================================================ */
+function renderQuestions(){
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
 
-    item.options.forEach((option, optionIndex) => {
-      const label = document.createElement("label");
-      label.className = "option";
+  const progress = document.createElement('div');
+  progress.className = 'progress';
+  progress.textContent = `${QUESTIONS.length} questions · 1 mark each · no negative marking`;
+  container.appendChild(progress);
 
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = `q${index}`;
-      radio.value = optionIndex;
+  QUESTIONS.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'q';
+    const num = document.createElement('div');
+    num.className = 'q-num';
+    num.textContent = `Question ${qi + 1} of ${QUESTIONS.length}`;
+    const text = document.createElement('div');
+    text.className = 'q-text';
+    text.textContent = q.text;
+    qDiv.appendChild(num);
+    qDiv.appendChild(text);
 
-      const span = document.createElement("span");
-      span.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
-
-      label.appendChild(radio);
+    q.options.forEach((opt, oi) => {
+      const label = document.createElement('label');
+      label.className = 'opt';
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `q${qi}`;
+      input.value = oi;
+      input.addEventListener('change', () => { userAnswers[qi] = oi; });
+      const span = document.createElement('span');
+      span.textContent = opt;
+      label.appendChild(input);
       label.appendChild(span);
-      card.appendChild(label);
+      qDiv.appendChild(label);
     });
 
-    root.appendChild(card);
+    container.appendChild(qDiv);
   });
 }
 
-function enterFullscreen() {
-  const el = document.documentElement;
-  if (el.requestFullscreen) {
-    el.requestFullscreen().catch(() => {});
-  }
-}
-
-function formatTime(total) {
-  const m = Math.floor(total / 60).toString().padStart(2, "0");
-  const s = (total % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
-
-function startTimer() {
-  $("timer").textContent = formatTime(secondsLeft);
-
+/* ============================================================
+   5. TIMER
+   ============================================================ */
+function startTimer(){
+  updateTimerDisplay();
   timerInterval = setInterval(() => {
-    secondsLeft--;
-    $("timer").textContent = formatTime(Math.max(0, secondsLeft));
-
-    if (secondsLeft <= 0) {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0){
       clearInterval(timerInterval);
-      submissionReason = "Time expired";
-      submitExam();
+      finishExam('Completed', 'Time expired');
     }
   }, 1000);
 }
+function updateTimerDisplay(){
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  const el = document.getElementById('timerDisplay');
+  el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  el.classList.toggle('low', timeLeft <= 60);
+}
 
-function getAnswersAndScore() {
-  let correct = 0, wrong = 0, unanswered = 0;
-
-  questions.forEach((_, i) => {
-    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-
-    if (!selected) {
-      unanswered++;
-    } else if (Number(selected.value) === answerKey[i]) {
-      correct++;
-    } else {
-      wrong++;
-    }
+/* ============================================================
+   6. SCORING (computed but never shown to the student)
+   ============================================================ */
+function computeScore(){
+  let score = 0;
+  QUESTIONS.forEach((q, qi) => {
+    if (userAnswers[qi] === q.correct) score++;
   });
-
-  return {
-    correct,
-    wrong,
-    unanswered,
-    score: correct
-  };
+  return score;
 }
 
-function makeSubmissionId() {
-  return "ORB-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
-}
-
-async function sendResult(payload) {
-  /*
-   * text/plain avoids a CORS preflight. The Apps Script backend parses the
-   * JSON body. mode:no-cors means the browser cannot read the response,
-   * but the POST is still sent to the deployed Web App.
-   */
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload),
-      keepalive: true
-    });
-    return true;
-  } catch (err) {
-    console.error("Could not send result:", err);
-    return false;
-  }
-}
-
-async function submitExam() {
-  if (submitted) return;
-  submitted = true;
-  examStarted = false;
-
-  if (timerInterval) clearInterval(timerInterval);
-
-  const result = getAnswersAndScore();
-  const elapsed = EXAM_DURATION_SECONDS - secondsLeft;
-  const minutes = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
+/* ============================================================
+   7. SUBMIT TO GOOGLE SHEETS
+   ============================================================ */
+async function sendResults(status, note){
+  const name = document.getElementById('studentName').value || 'Unknown';
+  const branch = document.getElementById('branch').value || '';
+  const section = document.getElementById('section').value || '';
+  const uid = document.getElementById('uid').value || '';
+  const email = document.getElementById('studentEmail').value || '';
+  const phone = document.getElementById('phone').value ? `+91${document.getElementById('phone').value}` : '';
+  const score = computeScore();
+  const total = QUESTIONS.length;
+  const percentage = Math.round((score / total) * 100);
+  const deviceId = getDeviceFingerprint();
 
   const payload = {
-    submissionId: makeSubmissionId(),
-    name: student.name,
-    email: student.email,
-    branch: student.branch,
-    section: student.section,
-    kietUid: student.kietUid,
-    kietEmail: student.kietEmail,
-    phone: student.phone,
-    score: result.score,
-    totalMarks: questions.length,
-    correct: result.correct,
-    wrong: result.wrong,
-    unanswered: result.unanswered,
-    timeTaken: `${minutes}m ${secs}s`,
-    tabSwitches: tabSwitches,
-    fullscreenExits: fullscreenExits,
-    submissionReason: submissionReason
+    name, branch, section, uid, email, phone,
+    score, total, percentage,
+    status: status + (note ? ` (${note})` : ''),
+    ip: clientIP,
+    deviceId
   };
 
-  $("exam").style.display = "none";
-  $("submitted").style.display = "block";
-  $("submitMessage").textContent =
-    `Your exam has been submitted. Score: ${result.score}/${questions.length}.`;
+  let duplicate = false;
 
-  await sendResult(payload);
-
-  try {
-    if (document.fullscreenElement && document.exitFullscreen) {
-      await document.exitFullscreen();
+  if (!SCRIPT_URL || SCRIPT_URL.indexOf('PASTE_YOUR') === 0){
+    console.warn('SCRIPT_URL not configured — results were not sent anywhere.');
+  } else {
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      duplicate = !!result.duplicate;
+    } catch (err) {
+      console.error('Failed to send results:', err);
     }
-  } catch (_) {}
+  }
+
+  // Mark this browser/device as having submitted, as a soft local guard
+  try { localStorage.setItem(SUBMIT_FLAG_KEY, 'true'); } catch(e){}
+
+  showScreen('screen-result');
+  if (duplicate){
+    document.getElementById('resultHeading').textContent = 'Duplicate submission recorded';
+    document.getElementById('resultNote').innerHTML =
+      'Our records show a previous submission under this UID or email.<br>' +
+      'This attempt has been logged for review. You may close this tab now.';
+  }
 }
 
-$("studentForm").addEventListener("submit", (e) => {
-  e.preventDefault();
+/* ============================================================
+   8. FINISH / AUTO-SUBMIT LOGIC
+   ============================================================ */
+function finishExam(status, note){
+  if (examSubmitted) return;
+  examSubmitted = true;
+  clearInterval(timerInterval);
+  sendResults(status, note);
+}
 
-  if (GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")) {
-    alert("Please configure GOOGLE_SCRIPT_URL in the HTML file before starting the exam.");
-    return;
+/* ============================================================
+   9. INTEGRITY GUARDS
+   ============================================================ */
+document.addEventListener('visibilitychange', () => {
+  if (examStarted && !examSubmitted && document.hidden){
+    finishExam('Flagged', 'left the exam tab');
   }
-
-  student = {
-    name: $("name").value.trim(),
-    email: $("email").value.trim(),
-    branch: $("branch").value.trim(),
-    section: $("section").value.trim(),
-    kietUid: $("kietUid").value.trim(),
-    kietEmail: $("kietEmail").value.trim(),
-    phone: $("phone").value.trim()
-  };
-
-  renderQuestions();
-
-  $("registration").style.display = "none";
-  $("exam").style.display = "block";
-
-  examStarted = true;
-  startTime = Date.now();
-  startTimer();
-  enterFullscreen();
 });
-
-$("submitButton").addEventListener("click", () => {
-  submissionReason = "Manual submission";
-  submitExam();
-});
-
-/*
- * Tab/window switching:
- * visibilitychange is the most reliable browser signal for leaving the tab.
- * We deliberately auto-submit on the first detected tab switch, as requested.
- */
-document.addEventListener("visibilitychange", () => {
-  if (examStarted && document.hidden && !submitted) {
-    tabSwitches++;
-    submissionReason = "Tab/window switch detected";
-    submitExam();
+window.addEventListener('blur', () => {
+  if (examStarted && !examSubmitted){
+    finishExam('Flagged', 'left the exam window');
   }
 });
 
-/* Fullscreen exit detection */
-document.addEventListener("fullscreenchange", () => {
-  if (examStarted && !document.fullscreenElement && !submitted) {
-    fullscreenExits++;
-    submissionReason = "Fullscreen exited";
-    submitExam();
-  }
-});
-
-/* Block common copying / inspection shortcuts */
-["copy", "cut", "paste", "contextmenu", "dragstart", "selectstart"].forEach(evt => {
+['copy','cut','contextmenu'].forEach(evt => {
   document.addEventListener(evt, e => {
     if (examStarted) e.preventDefault();
   });
 });
+document.addEventListener('selectstart', e => {
+  if (examStarted) e.preventDefault();
+});
 
-document.addEventListener("keydown", e => {
-  if (!examStarted) return;
-
-  const key = e.key.toLowerCase();
-  const blocked =
-    (e.ctrlKey || e.metaKey) && ["c","v","x","u","s","a","p"].includes(key);
-
-  const devTools =
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key));
-
-  if (blocked || devTools) {
+document.addEventListener('keydown', e => {
+  if (!examStarted || examSubmitted) return;
+  const blockedWithMod = ['c','x','p','s','f','u'];
+  if ((e.ctrlKey || e.metaKey) && blockedWithMod.includes(e.key.toLowerCase())){
     e.preventDefault();
-    e.stopPropagation();
+  }
+  // Block common devtools shortcuts
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())){
+    e.preventDefault();
+  }
+  if (e.key === 'F12'){
+    e.preventDefault();
   }
 });
 
-/* Warn against refresh/back navigation */
-window.addEventListener("beforeunload", e => {
-  if (examStarted && !submitted) {
+window.addEventListener('beforeunload', (e) => {
+  if (examStarted && !examSubmitted){
     e.preventDefault();
-    e.returnValue = "";
+    e.returnValue = '';
   }
+});
+
+/* ============================================================
+   10. WIRE UP UI
+   ============================================================ */
+// Sanitize phone input as the user types: digits only, max 10
+document.getElementById('phone').addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+});
+
+// If this browser already has a submission on record for this exam, block a second attempt
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    if (localStorage.getItem(SUBMIT_FLAG_KEY) === 'true'){
+      showScreen('screen-already');
+    }
+  } catch(e){}
+});
+
+document.getElementById('beginBtn').addEventListener('click', async () => {
+  const name = document.getElementById('studentName').value.trim();
+  const branch = document.getElementById('branch').value;
+  const section = document.getElementById('section').value.trim();
+  const uid = document.getElementById('uid').value.trim();
+  const email = document.getElementById('studentEmail').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+
+  if (!name || !branch || !section || !uid || !email || !phone){
+    alert('Please fill in all fields before starting.');
+    return;
+  }
+  if (!/^\d{10}$/.test(phone)){
+    alert('Please enter a valid 10-digit phone number.');
+    return;
+  }
+  if (!/^[a-zA-Z0-9._%+-]+@kiet\.edu$/i.test(email)){
+    alert('Please enter a valid KIET email address (must end with @kiet.edu).');
+    return;
+  }
+  try {
+    if (localStorage.getItem(SUBMIT_FLAG_KEY) === 'true'){
+      showScreen('screen-already');
+      return;
+    }
+  } catch(e){}
+
+  const beginBtn = document.getElementById('beginBtn');
+  beginBtn.disabled = true;
+  beginBtn.textContent = 'Loading...';
+
+  clientIP = await fetchClientIP();
+
+  const watermark = document.getElementById('watermark');
+  watermark.textContent = `Orbitron 2026 — ${name} (${uid})`;
+
+  renderQuestions();
+  showScreen('screen-exam');
+  examStarted = true;
+  startTimer();
+});
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const answeredCount = Object.keys(userAnswers).length;
+  let message = 'Are you sure you want to submit the exam? This cannot be undone.';
+  if (answeredCount < QUESTIONS.length){
+    message = `You've answered ${answeredCount} of ${QUESTIONS.length} questions. ` + message;
+  }
+  const proceed = confirm(message);
+  if (!proceed) return;
+  finishExam('Completed', '');
 });
 </script>
+
 </body>
 </html>
